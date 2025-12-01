@@ -12,7 +12,7 @@ import io
 app = FastAPI(title="Modelo Cacao", description="Clasificador de deficiencias nutricionales en hojas de cacao")
 
 print("🔄 Cargando modelo...")
-model = load_model("mejor_modelo_cacao.h5")   # O usa modelo_final_cacao.h5
+model = load_model("modelo_final_cacao.h5")   # O usa modelo_final_cacao.h5
 print("✅ Modelo cargado con éxito!")
 
 CLASS_NAMES = ["Potasio", "Nitrogeno", "Fosforo"]
