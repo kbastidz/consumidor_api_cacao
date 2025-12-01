@@ -43,3 +43,4 @@ async def predict(file: UploadFile = File(...)):
             CLASS_NAMES[i]: float(predictions[i] * 100) for i in range(3)
         }
     }
+
