@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import load_model
+from keras.saving import load_model
 from PIL import Image
 import numpy as np
 import io
@@ -12,8 +13,12 @@ import io
 app = FastAPI(title="Modelo Cacao", description="Clasificador de deficiencias nutricionales en hojas de cacao")
 
 print("🔄 Cargando modelo...")
-model = load_model("modelo_final_cacao.h5")   # O usa modelo_final_cacao.h5
-print("✅ Modelo cargado con éxito!")
+model = load_model(
+    "modelo_final_cacao.h5",
+    compile=False,          # evita intentar restaurar Optimizador/Sesión vieja
+    safe_mode=False         # permite cargar capas Legacy (como InputLayer)
+)
+print("Modelo cargado correctamente ✔")
 
 CLASS_NAMES = ["Potasio", "Nitrogeno", "Fosforo"]
 IMG_SIZE = 224  # Tamaño usado en MobileNetV2
