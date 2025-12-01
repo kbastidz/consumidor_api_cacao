@@ -28,7 +28,7 @@ CATEGORIAS = ['Potasio', 'Nitrogeno', 'Fosforo']
 
 # Cargar modelo al iniciar la API
 print("🔄 Cargando modelo...")
-modelo = load_model('modelo_final_cacao.h5')
+modelo = load_model('modelo_final_cacao.keras')
 print("✅ Modelo cargado exitosamente")
 
 @app.get("/")
