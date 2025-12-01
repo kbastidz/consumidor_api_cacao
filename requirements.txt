@@ -1,7 +1,6 @@
 fastapi==0.104.1
 uvicorn==0.24.0
-# CAMBIAR A UNA VERSIÓN MÁS NUEVA COMPATIBLE CON PYTHON 3.12
-tensorflow>=2.16.1 # TensorFlow 2.16.1 es la primera en soportar oficialmente Python 3.12
-Pillow==10.1.0
+tensorflow==2.16.1 # Compatible con Python 3.12
+Pillow==10.2.0     # Compatible con Python 3.12
 python-multipart==0.0.6
-numpy==1.24.3
+numpy==1.26.4      # Compatible con Python 3.12
