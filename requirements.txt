@@ -1,6 +1,6 @@
-fastapi==0.104.1
-uvicorn==0.24.0
-tensorflow==2.16.1 # Compatible con Python 3.12
-Pillow==10.2.0     # Compatible con Python 3.12
-python-multipart==0.0.6
-numpy==1.26.4      # Compatible con Python 3.12
+fastapi
+uvicorn
+tensorflow-cpu==2.13
+pillow
+numpy
+python-multipart

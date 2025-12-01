@@ -1,138 +1,45 @@
-# ========================================
-# API PARA DETECCIÓN DE DEFICIENCIAS EN CACAO
-# Deploy en Render
-# ========================================
-
 from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
 from tensorflow.keras.models import load_model
-import numpy as np
 from PIL import Image
+import numpy as np
 import io
-from typing import Dict
 
-app = FastAPI(title="Cacao Nutrition Detection API")
+# ======================================
+# API PARA DETECCIÓN DE DEFICIENCIAS EN CACAO
+# CLASES: Potasio, Nitrogeno, Fosforo
+# ======================================
 
-# Configurar CORS para permitir peticiones desde tu web
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # En producción, especifica tu dominio
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI(title="Modelo Cacao", description="Clasificador de deficiencias nutricionales en hojas de cacao")
 
-# Configuración
-IMG_SIZE = 224
-CATEGORIAS = ['Potasio', 'Nitrogeno', 'Fosforo']
-
-# Cargar modelo al iniciar la API
 print("🔄 Cargando modelo...")
-modelo = load_model('modelo_final_cacao.keras')
-print("✅ Modelo cargado exitosamente")
+model = load_model("mejor_modelo_cacao.h5")   # O usa modelo_final_cacao.h5
+print("✅ Modelo cargado con éxito!")
+
+CLASS_NAMES = ["Potasio", "Nitrogeno", "Fosforo"]
+IMG_SIZE = 224  # Tamaño usado en MobileNetV2
+
+def preprocess_image(img):
+    img = img.resize((IMG_SIZE, IMG_SIZE))
+    img = np.array(img) / 255.0
+    return np.expand_dims(img, axis=0)
 
 @app.get("/")
-async def root():
-    """Endpoint raíz para verificar que la API está funcionando"""
-    return {
-        "status": "online",
-        "message": "API de Detección de Deficiencias en Cacao",
-        "version": "1.0",
-        "categorias": CATEGORIAS
-    }
-
-@app.get("/health")
-async def health_check():
-    """Health check para Render"""
-    return {"status": "healthy"}
+def home():
+    return {"status": "API activa 🌱", "clases": CLASS_NAMES}
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)) -> Dict:
-    """
-    Endpoint principal para predecir deficiencias
-    
-    Args:
-        file: Imagen de hoja de cacao (JPG, PNG)
-    
-    Returns:
-        JSON con predicciones y probabilidades
-    """
-    try:
-        # Leer imagen
-        contents = await file.read()
-        img = Image.open(io.BytesIO(contents)).convert('RGB')
-        
-        # Preprocesar
-        img = img.resize((IMG_SIZE, IMG_SIZE))
-        img_array = np.array(img) / 255.0
-        img_array = np.expand_dims(img_array, axis=0)
-        
-        # Predecir
-        predicciones = modelo.predict(img_array, verbose=0)
-        clase_predicha = int(np.argmax(predicciones[0]))
-        confianza = float(predicciones[0][clase_predicha])
-        
-        # Formatear respuesta
-        response = {
-            "success": True,
-            "prediccion": {
-                "deficiencia": CATEGORIAS[clase_predicha],
-                "confianza": round(confianza * 100, 2),
-                "confianza_decimal": round(confianza, 4)
-            },
-            "probabilidades": {
-                cat: round(float(prob) * 100, 2) 
-                for cat, prob in zip(CATEGORIAS, predicciones[0])
-            },
-            "detalles": {
-                "clase_index": clase_predicha,
-                "imagen_procesada": f"{IMG_SIZE}x{IMG_SIZE}",
-                "formato_original": file.content_type
-            }
-        }
-        
-        return response
-        
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "message": "Error al procesar la imagen"
-        }
+async def predict(file: UploadFile = File(...)):
+    image_bytes = await file.read()
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
-@app.post("/predict/batch")
-async def predict_batch(files: list[UploadFile] = File(...)):
-    """Predecir múltiples imágenes a la vez"""
-    resultados = []
-    
-    for file in files:
-        try:
-            contents = await file.read()
-            img = Image.open(io.BytesIO(contents)).convert('RGB')
-            img = img.resize((IMG_SIZE, IMG_SIZE))
-            img_array = np.array(img) / 255.0
-            img_array = np.expand_dims(img_array, axis=0)
-            
-            predicciones = modelo.predict(img_array, verbose=0)
-            clase_predicha = int(np.argmax(predicciones[0]))
-            
-            resultados.append({
-                "archivo": file.filename,
-                "deficiencia": CATEGORIAS[clase_predicha],
-                "confianza": round(float(predicciones[0][clase_predicha]) * 100, 2)
-            })
-        except Exception as e:
-            resultados.append({
-                "archivo": file.filename,
-                "error": str(e)
-            })
-    
+    input_data = preprocess_image(img)
+    predictions = model.predict(input_data)[0]
+    index = np.argmax(predictions)
+
     return {
-        "success": True,
-        "total_imagenes": len(files),
-        "resultados": resultados
+        "clase_predicha": CLASS_NAMES[index],
+        "confianza": float(predictions[index] * 100),
+        "probabilidades": {
+            CLASS_NAMES[i]: float(predictions[i] * 100) for i in range(3)
+        }
     }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
