@@ -2,8 +2,20 @@ services:
   - type: web
     name: cacao-detection-api
     env: python
+    
+    # 💡 Comando de compilación: Instala las dependencias
     buildCommand: pip install -r requirements.txt
+    
+    # 🚀 Comando de inicio: Lanza la aplicación uvicorn
+    # (Asegúrate de que 'main:app' coincida con tu archivo y nombre de instancia de FastAPI)
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    
+    # 🔑 Variables de entorno (¡La SOLUCIÓN!):
     envVars:
+      # Especificamos Python 3.11 para asegurar la compatibilidad con TensorFlow 2.15.0
       - key: PYTHON_VERSION
-        value: 3.10.0
+        value: 3.11.8 # O puedes usar solo 3.11.x, Render elegirá la última estable
+      
+      # Si necesitas otras variables (por ejemplo, keys de API)
+      # - key: MY_API_KEY
+      #   value: mi_valor_secreto
