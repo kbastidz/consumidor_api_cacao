@@ -1,0 +1,9 @@
+REPORTE DE DIAGNÓSTICO - MODELO CACAO
+======================================================================
+
+Fecha: 2025-12-09T03:33:35
+
+Modelo antiguo existe: False
+Modelo nuevo existe: True
+Carpeta No-Cacao existe: True
+Carpeta No-Cacao tiene imágenes suficientes: False
