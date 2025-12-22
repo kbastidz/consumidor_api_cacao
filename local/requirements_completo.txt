@@ -1,0 +1,57 @@
+# ========================================
+# REQUIREMENTS COMPLETO - DETECTOR DE CACAO CON YOLO
+# Compatible con TensorFlow 2.16.1 + YOLOv8
+# Versiones testeadas y funcionando
+# ========================================
+
+# Core ML/DL (NumPy 1.x para compatibilidad con TensorFlow 2.16.1)
+tensorflow==2.16.1
+numpy==1.26.4
+scipy==1.13.1
+h5py==3.10.0
+
+# Visualización
+matplotlib==3.8.2
+seaborn>=0.11.0
+
+# Imágenes
+pillow==10.1.0
+opencv-python==4.8.0.76
+
+# PyTorch (2.5.1 para evitar problemas con safe_globals de 2.6+)
+--index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+
+# YOLO y dependencias
+ultralytics>=8.0.0
+pyyaml>=5.3.1
+requests>=2.23.0
+pandas>=1.1.4
+psutil
+py-cpuinfo
+thop>=0.1.1
+
+# Utilidades
+tqdm>=4.65.0
+
+# ========================================
+# NOTAS DE INSTALACIÓN:
+# ========================================
+# 
+# 1. Instalar en orden:
+#    pip install -r requirements_completo.txt
+#
+# 2. Si hay conflictos, reinstalar todo:
+#    pip uninstall -y numpy tensorflow torch ultralytics
+#    pip install -r requirements_completo.txt --force-reinstall
+#
+# 3. Versiones críticas (NO cambiar):
+#    - numpy==1.26.4 (TensorFlow 2.16.1 NO funciona con numpy 2.x)
+#    - torch==2.5.1 (PyTorch 2.6+ tiene problemas con ultralytics)
+#
+# 4. Verificar instalación:
+#    python -c "import torch; import tensorflow; import ultralytics; print('✅ OK')"
+#
+# ========================================

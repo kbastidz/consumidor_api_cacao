@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore')
 # CONFIGURACIÓN DE RUTAS - LOCALHOST
 # ========================================
 
-BASE_PATH = r'C:\Users\User\Desktop\local'
+BASE_PATH = r'C:\Users\User\Documents\GitHub\consumidor_api_cacao\local'
 DATASET_PATH = os.path.join(BASE_PATH, 'dataset_cacao')
 MODELS_PATH = BASE_PATH
 RESULTS_PATH = BASE_PATH
