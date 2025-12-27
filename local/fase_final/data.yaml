@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 3
+names: ['Fosforo', 'Nitrogeno', 'Potasio']
+
+roboflow:
+  workspace: cacao-leaf-detection
+  project: cacao-leaf-detection-v1
+  version: 17
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/cacao-leaf-detection/cacao-leaf-detection-v1/dataset/17

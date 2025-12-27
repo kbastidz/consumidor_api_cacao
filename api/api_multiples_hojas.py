@@ -21,7 +21,8 @@ from datetime import datetime
 # ========================================
 
 #YOLO_MODEL_PATH = r'runs/detect/cacao_detector/weights/best.pt'
-YOLO_MODEL_PATH = r"C:\Users\User\Documents\GitHub\consumidor_api_cacao\local\runs\detect\cacao_detector\weights\best.pt"
+#YOLO_MODEL_PATH = r"C:\Users\User\Documents\GitHub\consumidor_api_cacao\local\runs\detect\cacao_detector\weights\best.pt"
+YOLO_MODEL_PATH = r"C:\Users\User\Documents\GitHub\consumidor_api_cacao\local\fase_final\runs\detect\train2\weights\best.pt"
 OUTPUT_DIR = "resultados_api"
 
 # Umbrales de detección
